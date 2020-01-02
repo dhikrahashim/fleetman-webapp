@@ -37,11 +37,18 @@ pipeline {
            }
          }   
       }
-
+      stage("Deploy to Kubernetes"){
+        kubernetesDeploy(
+            configs:'springBootMongo.yml',
+            kubeconfigId: 'kubernetes_cluster_config',
+            enableConfigSubstitution: true
+            )
+    }
       stage('Deploy to Cluster') {
           steps {
-             kubernetesDeploy configs: '', kubeConfig: [path: ''], kubeconfigId: 'kubernetes_cluster_config', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
-             sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
+             withCredentials([kubeconfigContent(credentialsId: 'kubernetes_cluster_config', variable: 'KUBECONFIG_CONTENT')]) {
+               sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
+             }
           }
       }
    }

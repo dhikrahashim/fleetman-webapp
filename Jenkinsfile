@@ -38,12 +38,14 @@ pipeline {
          }   
       }
       
-      stage('Deploy to Cluster') {
-          steps {
-             withCredentials([kubeconfigContent(credentialsId: 'kubernetes_cluster_config', variable: 'KUBECONFIG_CONTENT')]) {
-               sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
-             }
-          }
+      stage("Deploy to Kubernetes") {
+         steps {
+           kubernetesDeploy(
+            configs:'deploy.yaml',
+            kubeconfigId: 'kubernetes_cluster_config',
+            enableConfigSubstitution: true
+            )
+         }   
       }
    }
 }

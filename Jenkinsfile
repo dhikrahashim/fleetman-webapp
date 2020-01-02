@@ -28,6 +28,13 @@ pipeline {
            sh 'docker image build -t ${REPOSITORY_TAG} .'
          }
       }
+      
+      stage("Docker Push") {
+        withCredentials([string(credentialsId: 'DockerHub_credentials', variable: 'DockerHub_credentials')]) {
+         sh "docker login -u hashimabd -p ${DockerHub_credentials}"
+        }
+         sh "docker push hashimabd/${SERVICE_NAME}"
+      }
 
       stage('Deploy to Cluster') {
           steps {

@@ -33,7 +33,7 @@ pipeline {
          steps {
            withCredentials([string(credentialsId: 'DockerHub_credentials', variable: 'DockerHub_credentials')]) {
              sh "docker login -u hashimabd -p ${DockerHub_credentials}"
-              sh "docker push hashimabd/${SERVICE_NAME}"
+              sh "docker push hashimabd/${REPOSITORY_TAG}"
            }
          }   
       }

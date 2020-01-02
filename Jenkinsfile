@@ -31,7 +31,7 @@ pipeline {
 
       stage('Deploy to Cluster') {
           steps {
-             kubernetesDeploy configs: '', credentialsType: 'SSH', kubeConfig: [path: ''], kubeconfigId: '', secretName: '', ssh: [sshCredentialsId: 'scann', sshServer: '34.69.63.39'], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
+             kubernetesDeploy configs: '', kubeConfig: [path: ''], kubeconfigId: 'kubernetes_cluster_config', secretName: '', ssh: [sshCredentialsId: '*', sshServer: ''], textCredentials: [certificateAuthorityData: '', clientCertificateData: '', clientKeyData: '', serverUrl: 'https://']
              sh 'envsubst < ${WORKSPACE}/deploy.yaml | kubectl apply -f -'
           }
       }

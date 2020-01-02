@@ -37,13 +37,7 @@ pipeline {
            }
          }   
       }
-      stage("Deploy to Kubernetes"){
-        kubernetesDeploy(
-            configs:'springBootMongo.yml',
-            kubeconfigId: 'kubernetes_cluster_config',
-            enableConfigSubstitution: true
-            )
-    }
+      
       stage('Deploy to Cluster') {
           steps {
              withCredentials([kubeconfigContent(credentialsId: 'kubernetes_cluster_config', variable: 'KUBECONFIG_CONTENT')]) {
